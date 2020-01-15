@@ -1,41 +1,41 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
 import AddBookmark from './addBookmark/addBookmark';
 import BookmarkApp from './bookmarkApp/bookmarkApp';
 
-
 class App extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      bookmmarks: [],
-      showAddForm: false,
+      bookmarks: [],
+      showAddForm: false
     };
   }
 
   componentDidMount() {
-    const url= 'https://tf-ed-bookmarks-api.herokuapp.com/v3/bookmarks';
+    const url = 'https://tf-ed-bookmarks-api.herokuapp.com/v3/bookmarks';
     const options = {
       method: 'GET',
       headers: {
-        "Authorization": "Bearer $2a$10$D7ftbDYRDEFvG/wLFP0OHebonJ5itPKVTMDSrM51Ts7P.KjzwEbZW",
-        "Content-Type": "application/json",
+        "Authorization": "Bearer $2a$10$WMVJArF8vURhFeOVy1ot/uNdmfBEuJg6/57SmdIyVHn5Fn1fHQH2y",
+        "Content-Type": "application/json"
       }
     };
 
     fetch(url, options)
       .then(res => {
         if(!res.ok) {
-          throw new Error('Something went wrong, polease try again later.')
+          throw new Error('Something went wrong, please try again later.');
         }
-        return res
+        return res;
       })
       .then(res => res.json())
       .then(data => {
         this.setState({
-          booksmarks: data,
-          error: null,
+          bookmarks: data,
+          error: null
         });
       })
       .catch(err => {
@@ -44,37 +44,34 @@ class App extends Component {
         });
       });
 
-    }
+  }
 
-    setShowAddForm(show) {
-      this.setState({
-        showAddForm: show
-      });
-    }
+  setShowAddForm(show) {
+    this.setState({
+      showAddForm: show
+    });
+  }
 
-      addBookmark(bookmark) {
-        this.setState({
-          bookmarks: [...this.state.bookmarks, bookmark],
-          showAddForm: false,
-        });
-      }
+  addBookmark(bookmark) {
+    this.setState({
+      bookmarks: [...this.state.bookmarks, bookmark],
+      showAddForm: false
+    });
+  }
 
   render() {
     const page = this.state.showAddForm
           ? <AddBookmark 
-          showForm={show => this.setShowAddForm(show)} 
-          handleAdd={bookmark => this.addBookmark(bookmark)}
-          />
-          : <BookmarkApp bookmarks={this.state.bookmarks} showForm={show => this.setShowAddForm(show)} />
-
+                 showForm={show => this.setShowAddForm(show)} 
+                 handleAdd={bookmark => this.addBookmark(bookmark)}/>
+          : <BookmarkApp bookmarks={this.state.bookmarks} showForm={show => this.setShowAddForm(show)}/>; 
 
     return (
       <div className="App">
-        {page}
+        { page }
       </div>
-    )
+    );
   }
 }
-
 
 export default App;
