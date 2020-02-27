@@ -1,33 +1,43 @@
 import React, { Component } from 'react';
-import './bookmarkList.css';
-import Bookmark from '../bookmark/bookmark';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import BookmarksContext from '../BookmarksContext';
+import BookmarkItem from '../bookmarkItem/bookmarkItem';
+import './BookmarkList.css'
 
 class BookmarkList extends Component {
+  static proptTypes = {
+    bookmarks: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.oneOfType([
+          PropTypes.number,
+          PropTypes.string,
+        ]).isRequired,
+      })
+    )
+  };
+
+  static defaultProps = {
+    bookmarks: []
+  };
+
+  static contextType = BookmarksContext;
+
   render() {
-    const bookmarks = this
-          .props
-          .bookmarks
-          .map((bookmark, i) => <Bookmark { ...bookmark } key={i}/>);
+    const { bookmarks } = this.context
     return (
-      <div className="bookmarkList">
-        {bookmarks}
-      </div>
+      <section className='BookmarkList'>
+        <h2>Your bookmarks</h2>
+        <ul className='BookmarkList__list' aria-live='polite'>
+          {bookmarks.map(bookmark =>
+            <BookmarkItem
+              key={bookmark.id}
+              {...bookmark}
+            />
+          )}
+        </ul>
+      </section>
     );
   }
 }
-
-BookmarkList.propTypes = {
-  booksmarks: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    rating: PropTypes.number, 
-    description: PropTypes.string,
-  }))
-}
-
-BookmarkList.defaultProps = {
-  bookmarks: []
-};
 
 export default BookmarkList;
